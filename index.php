@@ -77,19 +77,21 @@ function Hxm_WeaTher($ID,$fromUsername) {
 	$appid='';
 	//这里填写secret
 	$secret='';
-	$weather=Curl("https://weather.cma.cn/api/weather/".$ID);
-	$weather=json_decode($weather,true);
-	if($weather['data']['daily']['0']['dayText']==$weather['data']['daily']['0']['nightText']) {
-		$天气=$weather['data']['daily']['0']['dayText'];
+	//这里填写模板ID
+	$template_id='';
+	$Weather=Curl("https://weather.cma.cn/api/weather/".$ID);
+	$Weather=json_decode($Weather,true);
+	if($Weather['data']['daily']['0']['dayText']==$Weather['data']['daily']['0']['nightText']) {
+		$天气=$Weather['data']['daily']['0']['dayText'];
 	} else {
-		$天气=$weather['data']['daily']['0']['dayText'].'转'.$weather['data']['daily']['0']['nightText'];
+		$天气=$Weather['data']['daily']['0']['dayText'].'转'.$Weather['data']['daily']['0']['nightText'];
 	}
-	$weather1=Curl("https://weather.cma.cn/api/now/".$ID);
-	$weather1=json_decode($weather1,true);
+	$Weather_v2=Curl("https://weather.cma.cn/api/now/".$ID);
+	$Weather_v2=json_decode($Weather_v2,true);
 	$Json=Curl('https://v1.hitokoto.cn');
 	$Hitokoto=json_decode($Json,true);
 	//推送至微信
-	$Json='{"touser":"'.$fromUsername.'","template_id":"dqm64aTkGmkgPO6YciZ9Aa53RLRlqRg-Pt6tiwWUxEg","topcolor":"#FF0000","data":{"date":{"value":"'.$weather['data']['daily']['0']['date'].'","color":"#173177"},"city":{"value":"'.$weather['data']['location']['path'].'","color":"#173177"},"weather":{"value":"'.$天气.'","color":"#173177"},"xMax":{"value":"'.$weather['data']['daily']['0']['high'].'℃","color":"#173177"},"xMin":{"value":"'.$weather['data']['daily']['0']['low'].'℃","color":"#173177"},"tips":{"value":"'.$weather1['data']['alarm']['0']['title'].'","color":"#FF0000"},"hitokoto":{"value":"'.$Hitokoto['hitokoto'].'","color":"#173177"}}}';
+	$Json='{"touser":"'.$fromUsername.'","template_id":"'.$template_id.'","topcolor":"#FF0000","data":{"date":{"value":"'.$Weather['data']['daily']['0']['date'].'","color":"#173177"},"city":{"value":"'.$Weather['data']['location']['path'].'","color":"#173177"},"weather":{"value":"'.$天气.'","color":"#173177"},"xMax":{"value":"'.$Weather['data']['daily']['0']['high'].'℃","color":"#173177"},"xMin":{"value":"'.$Weather['data']['daily']['0']['low'].'℃","color":"#173177"},"tips":{"value":"'.$Weather_v2['data']['alarm']['0']['title'].'","color":"#FF0000"},"hitokoto":{"value":"'.$Hitokoto['hitokoto'].'","color":"#173177"}}}';
 	$access_token=json_decode(curl('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$appid.'&secret='.$secret.''),true)['access_token'];
 	$Url='https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$access_token;
 	$WeChat=Curl_Post($Url,$Json);
@@ -97,9 +99,7 @@ function Hxm_WeaTher($ID,$fromUsername) {
 
 if($keyword == 'Test') {
 	$WeChat=Hxm_WeaTher($ID,$fromUsername);
-}
-
-if($_GET['type'] == 'corn') {
+} elseif($_GET['type'] == 'corn') {
 	//推送至用户列表
 	$List=glob('./Data/*.txt');
 	foreach ($List as $value) {
@@ -109,4 +109,6 @@ if($_GET['type'] == 'corn') {
 			Hxm_WeaTher($ID,$fromUsername['1']);
 		}
 	}
+} else {
+	echo 'Hello World! :)';
 }
