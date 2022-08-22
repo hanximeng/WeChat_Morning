@@ -18,7 +18,7 @@ http://你的域名或者IP/index.php
 https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login
 
 ## 模板代码
-今天是 {{date.DATA}} {{xq.DATA}}
+今天是 {{date.DATA}}
 
 以下是 {{city.DATA}} 今日天气情况
 
