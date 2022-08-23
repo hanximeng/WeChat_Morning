@@ -36,5 +36,7 @@ https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login
 
 http://你的域名或者IP/index.php
 
+对接完成后删除27-42行
+
 ## Tips
 有任何问题都可添加QQ群：549522943
