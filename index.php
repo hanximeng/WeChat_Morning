@@ -24,6 +24,23 @@ function Curl_Post($remote_server, $post_string) {
 	return $data;
 }
 
+// 微信token认证
+    $signature = $_GET["signature"];
+    $timestamp = $_GET["timestamp"];
+    $nonce = $_GET["nonce"];
+    $echostr = $_GET["echostr"];
+
+    // 你的设置Token
+    $token = "";
+
+    $tmpArr = array($nonce,$token,$timestamp);
+    sort($tmpArr,SORT_STRING);
+    $str = implode($tmpArr);
+    $sign = sha1($str);
+    if ($sign == $signature) {
+    exit($echostr);
+}
+
 $keyword = trim($postObj->Content);
 $fromUsername=$postObj->FromUserName;
 $toUsername = $postObj->ToUserName;
